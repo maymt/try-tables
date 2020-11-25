@@ -82,6 +82,7 @@ function App() {
     await axios.get(baseUrl)
     .then(response => {
       setData(response.data);
+      console.log(response.data);
     })
   }
 
@@ -91,11 +92,11 @@ function App() {
 
   return (
     <div className="App">
-      <Grid spacing = {3}>
-        <Grid xs = {12}>
+      <Grid container spacing = {3}>
+        <Grid item xs = {12}>
           <Navbar />
         </Grid>
-        <Grid xs = {12} className = {classes.container}>
+        <Grid item xs = {12} className = {classes.container}>
           <MUIDataTable
             title={"Pedidos"}
             data={data}
