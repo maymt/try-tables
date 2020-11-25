@@ -1,9 +1,9 @@
-import './App.css';
+import '../assets/css/App.css';
 import MUIDataTable from "mui-datatables";
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@material-ui/core';
-import Navbar from  './Navbar';
+import Navbar from  '../components/Navbar';
 import {makeStyles} from '@material-ui/core/styles';
 
 const baseUrl = 'postgres://mpdlwiymksjbbo:026c558a53f723dd0c07a2e4c2265c33f0574b9f66b0d53256e18cdcdb729c33@ec2-52-206-15-227.compute-1.amazonaws.com:5432/daokhr6d468c47'
@@ -11,7 +11,7 @@ const baseUrl = 'postgres://mpdlwiymksjbbo:026c558a53f723dd0c07a2e4c2265c33f0574
 
 const useStyles= makeStyles(()=>({
 	container:{
-		marginTop: '30px'
+		padding: '30px'
 	}
 }));
 
@@ -80,7 +80,7 @@ function App() {
   const [data, setData] = useState([]);
 
   const peticionGet = async () => {
-    await axios.get(connectionString)
+    await axios.get(baseUrl)
     .then(response => {
       setData(response.data);
       console.log(response.data);

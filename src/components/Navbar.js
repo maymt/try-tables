@@ -2,7 +2,7 @@ import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {AppBar, Toolbar, IconButton, Typography} from '@material-ui/core';
 import Home from '@material-ui/icons/Home';
-import logo from './logo-blanco.png';
+import logo from '../assets/img/logo-blanco.png';
 
 const useStyles = makeStyles(()=>({
 	root: {
