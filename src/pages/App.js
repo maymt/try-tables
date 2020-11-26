@@ -1,12 +1,14 @@
 import '../assets/css/App.css';
 import MUIDataTable from "mui-datatables";
-import axios from 'axios';
+//import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, Modal } from '@material-ui/core';
 import Navbar from  '../components/Navbar';
 import {makeStyles} from '@material-ui/core/styles';
+import Filters from '../components/Filters';
 
-const baseUrl = 'postgres://mpdlwiymksjbbo:026c558a53f723dd0c07a2e4c2265c33f0574b9f66b0d53256e18cdcdb729c33@ec2-52-206-15-227.compute-1.amazonaws.com:5432/daokhr6d468c47'
+
+const baseUrl = 'http://localhost:4000/tabla2/'
 
 
 const useStyles= makeStyles(()=>({
@@ -44,30 +46,54 @@ const columns = [
   download: 'false',
   print: 'false',
   search: 'false',
+  fixedColumns: 2
  };
 
+
 function App() {
+
   const classes= useStyles();
 
   const [data, setData] = useState([]);
 
-  const peticionGet = async () => {
-    await axios.get(baseUrl)
-    .then(response => {
-      setData(response.data);
-      console.log(response.data);
-    })
-  }
+  // const peticionGet = async () => {
+  //   await axios.get(baseUrl)
+  //   .then(response => {
+  //     setData(response.data);
+  //   })
+  // }
 
   useEffect (() => {
-    peticionGet();
+    async function fetchData() {
+      const pedidosFetch = await fetch(
+        baseUrl,
+        { 
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          redirect: "follow",
+        }
+      );
+  
+      const data = await pedidosFetch.json();
+      setData(data);
+      //console.log(data);
+    }
+    window.scrollTo(0, 0);
+    fetchData();
   }, [])
+
 
   return (
     <div className="App">
       <Grid container spacing = {3}>
         <Grid item xs = {12}>
           <Navbar />
+        </Grid>
+        <Grid item xs = {12}>
+          <Filters />
         </Grid>
         <Grid item xs = {12} className = {classes.container}>
           <MUIDataTable
