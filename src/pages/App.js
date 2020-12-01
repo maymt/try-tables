@@ -167,12 +167,12 @@ function App() {
           <h3>Resumen</h3>
           <Grid container>
           <Grid item xs={12}>
-            <h3 align = "center">Obra: {obraSeleccionado.obra_oc}</h3>
-            <h4 align = "center">Impuntualidad Melón: {rows[0]} Minutos</h4>
-            <h4 align = "center">Sobrestadía: {rows[1]} Minutos</h4>
-            <h4 align = "center">Diferencia: {rows[2]}. ({rows[0] - rows[1]})Minutos</h4>
-            <h4 align = "center">Tramos de 15min: {rows[3]}</h4>
-            <h4 align = "center">Monto: {rows[4]} UF</h4>
+            <h3 align = "left">Obra: {obraSeleccionado.obra_oc}</h3>
+            <h4 align = "left">Impuntualidad Melón: {rows[0]} Minutos</h4>
+            <h4 align = "left">Sobrestadía: {rows[1]} Minutos</h4>
+            <h4 align = "left">Diferencia: {rows[2]}. ({rows[0] - rows[1]})Minutos</h4>
+            <h4 align = "left">Tramos de 15min: {rows[3]}</h4>
+            <h4 align = "left">Monto: {rows[4]} UF</h4>
           </Grid>
 
           <Grid item xs={12}>
