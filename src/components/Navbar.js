@@ -6,14 +6,15 @@ import logo from '../assets/img/logo-blanco.png';
 
 const useStyles = makeStyles(()=>({
 	root: {
-		flexGrow: 1
+		flexGrow: 1,
+		fixed: 'top'
 	},
-	menuButton: {
-		marginRight: '16px'
+	homeButton: {
+		marginRight: '20px'
 	},
 	title: {
 		flexGrow: 1,
-		fontSize: 'bold'
+		fontWeight: 'bold'
 	},
 	borderRadius: '50%'
 }));
@@ -24,10 +25,10 @@ function Navbar() {
 		<div className = {classes.root}>
 			<AppBar position = "static" style={{ background: '#006C90'}}>
 				<Toolbar>
-					<IconButton edge = "start" className = {"classes.menuButton"} color = "inherit">
+					<IconButton edge = "start" className = {"classes.homeButton"} color = "inherit" href = "http://localhost:3000/">
 						<Home />
 					</IconButton>
-					<Typography variant="h6" className={classes.title}>
+					<Typography variant="h5" className={classes.title}>
 						MVP Sobrestadía
 					</Typography>
 					<IconButton color="inherit">
