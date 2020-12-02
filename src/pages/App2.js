@@ -7,54 +7,32 @@ import {FilterList, Receipt, Close} from '@material-ui/icons';
 import axios from 'axios';
 import MUIDataTable from "mui-datatables";
 import Navbar from  '../components/Navbar';
-import Resumen from '../components/Resumen';
 
 
-const baseUrl="http://localhost:3001";
+const baseUrl="http://localhost:4000/tabla2";
 
-
-const columnas = [
-  { name: 'Fecha', label: 'Fecha', options: { filter: false, sort: false } },
-  { name: 'cliente', label: 'Rut', options: { filter: false, sort: false } }, 
-  { name: 'cliente_name', label: 'Razón Social', options: { filter: false, sort: false } }, 
-  { name: 'obra', label: 'Cod. Obra', options: { filter: false, sort: false } }, 
-  { name: 'obra_name', label: 'Nombre Obra', options: { filter: false, sort: false } }, 
-  { name: 'pedido', label: 'Pedida', options: { filter: false, sort: false } }, 
-  { name: 'tren_pedido', label: 'Tren Pedido', options: { filter: false, sort: false } }, 
-  { name: 'posicion_en_tren', label: 'Posición Tren', options: { filter: false, sort: false } }, 
-  { name: 'Guia_despacho', label: 'Guía Despacho', options: { filter: false, sort: false } }, 
-  { name: 'planta', label: 'Planta', options: { filter: false, sort: true } }, 
-  { name: 'producto_codigo', label: 'Cod. Producto', options: { filter: false, sort: false } }, 
-  { name: 'producto', label: 'Producto', options: { filter: false, sort: false } }, 
-  { name: 'm3', label: 'Volumen', options: { filter: true, sort: false, filterType: 'multiselect' } }, 
-  { name: 'camion', label: 'Camión', options: { filter: false, sort: false } }, 
-  { name: 'contratista', label: 'Contratista', options: { filter: false, sort: false }}, 
-  { name: 'hora_solicitada_cliente_original', label: 'Hora Solicitada', options: { filter: false, sort: false } }, 
-  { name: 'hora_solicitada_cliente_primer_despacho_de_tren', label: 'Hora 1er Tren', options: { filter: false, sort: false } }, 
-  { name: 'hora_solicitada_cliente_corregida', label: 'Hora Corregida', options: { filter: false, sort: false } }, 
-  { name: 'espaciamiento', label: 'Espaciamiento', options: { filter: false, sort: false } }, 
-  { name: 'tiempo_viaje_vuelta_proyectado', label: 'Tiempo Ida', options: { filter: false, sort: false } }, 
-  { name: 'tiempo_ida_vuelta_proyectado', label: 'Tiempo Vuelta', options: { filter: false, sort: false } }, 
-  { name: 'hora_tiquete', label: 'Hora Tiquete', options: { filter: false, sort: false } }, 
-  { name: 'hora_de_carga', label: 'Hora Inicio Carga', options: { filter: false, sort: false } }, 
-  { name: 'hora_fin_de_carga', label: 'Hora Fin Carga', options: { filter: false, sort: false } }, 
-  { name: 'hora_salida_de_planta', label: 'Hora Salida Planta', options: { filter: false, sort: false } }, 
-  { name: 'hora_llegada_a_obra', label: 'Hora Llegada Obra', options: { filter: false, sort: false } }, 
-  { name: 'hora_inicio_descarga', label: 'Hora Inicio Descarga', options: { filter: false, sort: false } }, 
-  { name: 'hora_salida_a_planta', label: ' Hora Salida Obra', options: { filter: false, sort: false } },
-  { name: 'hora_llegada_a_planta', label: 'Hora Llegada Planta', options: { filter: false, sort: false } },
-  { name: 'direccion', label: 'Dirección', options: { filter: false, sort: false } }, 
-  { name: 'cuadrante', label: 'Cuadrante', options: { filter: false, sort: false } }, 
-  { name: 'anillo', label: 'Anillo', options: { filter: false, sort: false } }, 
-  { name: 'costo_produccion', label: 'Costo Producción', options: { filter: false, sort: false } }, 
-  { name: 'codigo_remosion_pedido', label: 'Cod. Remosión Pedido', options: { filter: true, sort: false, filterType: 'multiselect' } },
-  { name: 'codigo_remosion_tren', label: 'Cod. Remosión Tren', options: { filter: true, sort: false, filterType: 'multiselect' } }, 
-  { name: 'codigo_remosion_tren', label: 'Cod. Remosión Tren', options: { filter: true, sort: false, filterType: 'multiselect' } }, 
-  { name: 'codigo_remosion_linea', label: 'Cod. Remosión Línea', options: { filter: true, sort: false, filterType: 'multiselect' } }, 
-  { name: 'codigo_remosion_fuera_plazo', label: 'Cod. Remosión FP', options: { filter: true, sort: false, filterType: 'multiselect' } }, 
-  { name: 'm3_a_botadero', label: 'M3 Botadero', options: { filter: true, sort: false, filterType: 'multiselect' } }, 
-  { name: 'm3_a_redestino', label: 'M3 Redestino', options: { filter: true, sort: false, filterType: 'multiselect' } }
-];
+const columns = [
+  { name: 'cliente', label:  'Rut Razón Social', type: 'numeric', options: { filter: false, sort: false }},
+  { name: 'razon_social', label:  'Razón Social', options: { filter: true, sort: false }},
+  { name: 'guia_despacho', label:  'Guía Despacho', options: { filter: false, sort: true }},
+  { name: 'obra_oc', label:  'Obra', options: { filter: true, sort: true }},
+  { name: 'fecha', label:  'Fecha', type: 'date', options: { filter: false, sort: true }},
+  { name: 'pedido', label:  'Pedido', type:'numeric' , options: { filter: false, sort: true }},
+  { name: 'mes', label:  'Mes', type:'numeric' , options: { filter: true, sort: true, filterType: 'multiselect' }},
+  { name: 'producto', label:  'Producto', options: { filter: false, sort: false }},
+  { name: 'm3', label:  'Volumen', type: 'numeric', options: { filter: false, sort: true }},
+  { name: 'hora_solicitada_cliente_original', label:  'Hora Solicitada', options: { filter: false, sort: true }},
+  { name: 'hora_llegada_a_obra', label:  'Llegada Obra', options: { filter: false, sort: true }},
+  { name: 'puntualidad', label:  '¿Puntual?', options: { filter: true, sort: false, filterType: 'checkbox' }},
+  { name: 'atraso', label:  'Minutos Impuntualidad', type:'time' , options: { filter: false, sort: true }},
+  { name: 'estimada', label:  'Estadía Asignada', options: { filter: false, sort: false }},
+  { name: 'hora_vuelta_a_planta', label:  'Salida Obra', options: { filter: false, sort: false }},
+  { name: 'real', label:  'Estadía Real', options: { filter: false, sort: false }},
+  { name: 'adicionales', label:  'Minutos Adicionales', options: { filter: false, sort: false }},
+  { name: 'diferencia_minutos', label:  'Minutos Diferencia' , options: { filter: false, sort: true }},
+  { name: 'tramos', label:  'Tramos SE', type: 'numeric', options: { filter: false, sort: false }},
+  { name: 'monto', label:  'Monto (UF)' , type: 'numeric', options: { filter: false, sort: false }}
+ ];
 
 
  const options = {
@@ -117,13 +95,9 @@ function App() {
   }
 
   const peticionGet=async()=>{
-    await axios.get(baseUrl+"/datos")
+    await axios.get(baseUrl)
     .then(response=>{
-      console.log(response.data);
-      setData(response.data);
-      console.log(data);
-      setearDatos(data);
-      console.log(data);
+     setData(response.data);
     }).catch(error=>{
       console.log(error);
     })
@@ -131,16 +105,16 @@ function App() {
 
 
   const peticionGet1=async()=>{
-    await axios.get(baseUrl+"/datos/"+obraSeleccionado.fecha_inicio+"/"+obraSeleccionado.fecha_fin, obraSeleccionado)
+    await axios.get(baseUrl+"/"+obraSeleccionado.fecha_inicio+"/"+obraSeleccionado.fecha_fin+"/"+obraSeleccionado.obra_oc, obraSeleccionado)
     .then(response=>{
-      setData(response.data);
+     setData(response.data);
     }).catch(error=>{
       console.log(error);
     })
   }
 
   const peticionSuma = async() => {
-    await axios.get(baseUrl+"/datos/"+obraSeleccionado.fecha_inicio+"/"+obraSeleccionado.fecha_fin+"/"+obraSeleccionado.obra_oc+"/9", obraSeleccionado)
+    await axios.get(baseUrl+"/"+obraSeleccionado.fecha_inicio+"/"+obraSeleccionado.fecha_fin+"/"+obraSeleccionado.obra_oc+"/9", obraSeleccionado)
     .then(response=>{
       setSumas(response.data);
     }).catch(error=>{
@@ -186,32 +160,6 @@ function App() {
     setRows(rows);
   }
 
-  function setearDatos (data) {
-    let x,y;
-    //recorriendo la matriz
-    for (x in data) {
-      for (y in data[x]){
-        if (data[x][y] === "NaN" || data[x][y] === null){
-          data[x][y] = 0;
-        }
-      }
-    }
-    setData(data);
-  }
-
-  function filtrarDatos(data, fecha_i, fecha_2, obra) {
-    let x,y;
-
-    for (x in data){
-      if (data[x][4] !== obra) {
-        
-      }
-    }
-  }
-
-
-
-
   useEffect(()=>{
     peticionGet();
   }, [])
@@ -224,7 +172,7 @@ function App() {
         <Navbar/>
       </Grid>
 
-      <Grid container spacing = {1}>
+      <Grid container spacing = {3}>
         
         <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
           <Card className={classes.card}>
@@ -363,7 +311,7 @@ function App() {
           <MUIDataTable
             title={"Pedidos"}
             data={data}
-            columns={columnas}
+            columns={columns}
             options={options}
           />
       </Grid>
