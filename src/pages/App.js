@@ -7,10 +7,11 @@ import {FilterList, Receipt, Close} from '@material-ui/icons';
 import axios from 'axios';
 import MUIDataTable from "mui-datatables";
 import Navbar from  '../components/Navbar';
-import Resumen from '../components/Resumen';
+import moment from 'moment';
 
 
-const baseUrl="http://localhost:3001";
+
+const baseUrl="http://localhost:3001/";
 
 
 const columnas = [
@@ -82,18 +83,26 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(3),
     width: 200,
   },
+  button:{
+    fontSize: 14,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    margin: '20px'
+  },
   card:{
     textAlign: 'center',
-    padding: '50px',
+    padding: '10px',
     margin: '20px'
   },
   texto:{
-      fontSize: 18,
-      textAlign: 'left'
+      fontSize: 16,
+      textAlign: 'left',
+      fontWeight: 'medium'
   },
   titulo:{
       fontWeight: 'bold',
       fontSize: 22,
+      marginBottom: '10px'
   }
 }));
 
@@ -117,36 +126,26 @@ function App() {
   }
 
   const peticionGet=async()=>{
-    await axios.get(baseUrl+"/datos")
+    var hoy = moment().get('year')+"-"+(moment().get('month') + 1)+"-"+(moment().get('day') - 1);
+    hoy = moment(hoy, 'YYYY-MM-dd');
+    hoy = hoy._i;
+
+    var inicio = moment().subtract(1, 'months');
+    var inicio = moment(inicio).get('year')+"-"+moment(inicio).get('month')+"-"+moment(inicio).get('day');
+    inicio = moment(inicio, 'YYYY-MM-dd');
+    inicio = inicio._i;
+    
+    await axios.get(baseUrl+"datos")
+    // await axios.get(baseUrl+"/"+inicio+"/"+hoy)
     .then(response=>{
-      console.log(response.data);
+      // console.log(response.data)
       setData(response.data);
       console.log(data);
-      setearDatos(data);
-      console.log(data);
     }).catch(error=>{
       console.log(error);
     })
   }
 
-
-  const peticionGet1=async()=>{
-    await axios.get(baseUrl+"/datos/"+obraSeleccionado.fecha_inicio+"/"+obraSeleccionado.fecha_fin, obraSeleccionado)
-    .then(response=>{
-      setData(response.data);
-    }).catch(error=>{
-      console.log(error);
-    })
-  }
-
-  const peticionSuma = async() => {
-    await axios.get(baseUrl+"/datos/"+obraSeleccionado.fecha_inicio+"/"+obraSeleccionado.fecha_fin+"/"+obraSeleccionado.obra_oc+"/9", obraSeleccionado)
-    .then(response=>{
-      setSumas(response.data);
-    }).catch(error=>{
-      console.log(error);
-    })
-  }
 
   function createDatos () {
     if(sumas[0].min_atraso.hours === undefined || sumas[0].min_atraso.hours === NaN){
@@ -186,30 +185,69 @@ function App() {
     setRows(rows);
   }
 
-  function setearDatos (data) {
-    let x,y;
-    //recorriendo la matriz
-    for (x in data) {
-      for (y in data[x]){
-        if (data[x][y] === "NaN" || data[x][y] === null){
-          data[x][y] = 0;
-        }
-      }
-    }
-    setData(data);
-  }
+  // function setearDatos (data) {
+  //   let x,y;
+  //   //recorriendo la matriz
+  //   for (x in data) {
+  //     for (y in data[x]){
+  //       console.log(data[x][17]);
+  //       }
+  //     }
+  //   }
+  //   setData(data);
+  // }
 
-  function filtrarDatos(data, fecha_i, fecha_2, obra) {
-    let x,y;
+  function filtrarDatos(data, fecha_inicio, fecha_fin, obra) {
+    let x;
+    
+    const rows = [];
+
+    var puntual = 0;
+    var atraso = 0;
+    var estadia_esperada = 0;
+    var estadia_real = 0;
+    var min_adicionales = 0;
+    var min_diferencia = 0;
+    var tramos = 0;
+    var monto = 0;
+
+    var i = 0;
 
     for (x in data){
-      if (data[x][4] !== obra) {
-        
+      var solicitada = data[x][17]; //hora solicitada corregida.
+      var llegada = data[x][25]; //hora de llegada a la obra.
+      var salida = data[x][27]; // hora de salida de la obra.
+      var estadia_esperada = 15 + data[x][12] * 6 + 10; //estadia esperada calculada en base al volumen pedido + los 15 minutos de posicionamiento.
+
+      if (llegada !== null && salida !== null){
+        solicitada = parseInt(solicitada.substring(0,2)) * 3600 + parseInt(solicitada.substring(3,6)) * 60 + parseInt(solicitada.substring(7,8));
+        llegada = parseInt(llegada.substring(0,2)) * 3600 + parseInt(llegada.substring(3,6)) * 60 + parseInt(llegada.substring(7,8));
+        salida = parseInt(salida.substring(0,2)) * 3600 + parseInt(salida.substring(3,6)) * 60 + parseInt(salida.substring(7,8));
+
+        var estadia_real = (salida - llegada) / 60;
+
+                
+      if (Math.abs(llegada - solicitada) > 1800) {
+        atraso =  Math.abs((llegada - solicitada) - 1800 ) / 60 ; //1800 s = 30 minutos rango puntualidad
+        atraso = Math.ceil(atraso);
+        puntual = "No";
+      } else{
+        atraso = 0;
+        puntual = "Si";
+      };
+
+      console.log(puntual, atraso);
+      
+
+      if (data[x][3].includes(obra) && data[x][0] >= fecha_inicio && data[x][0] <= fecha_fin) {
+        rows.push(data[x]); 
       }
-    }
+      }
+    setData(rows);
   }
+}
 
-
+  
 
 
   useEffect(()=>{
@@ -224,9 +262,10 @@ function App() {
         <Navbar/>
       </Grid>
 
-      <Grid container spacing = {1}>
+
+      <Grid container spacing = {0}>
         
-        <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
+        <Grid item xs={12} sm={5} md={5} lg={5} xl={5}>
           <Card className={classes.card}>
             <CardContent>
 
@@ -259,9 +298,6 @@ function App() {
               <Typography className={classes.texto}>
                 Monto: {rows[4]} UF
               </Typography>
-
-                <br></br>
-                <br></br>
               
               <Button
                   variant="contained"
@@ -277,7 +313,7 @@ function App() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={8} md={8} lg={8} xl={8}>
+        <Grid item xs={12} sm={7} md={7} lg={7} xl={7}>
           <Card className={classes.card}>
             <CardContent>
 
@@ -285,9 +321,9 @@ function App() {
                 Filtros
               </Typography>
               
-              <br></br>
-              <br></br>
-              <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
 
             <Grid item xs={12}>
               <TextField className={classes.textField}
@@ -328,18 +364,17 @@ function App() {
             <br></br>
             <br></br>
 
+
             <Grid item xs={12}>
               <Button
                 variant="contained"
                 color="primary"
                 className={classes.button}
                 startIcon={<FilterList />}
-                onClick={()=> (peticionGet1(), peticionSuma())}
+                onClick={()=> filtrarDatos(data, obraSeleccionado.fecha_inicio, obraSeleccionado.fecha_fin, obraSeleccionado.obra_oc)}
               >
                 Filtrar
               </Button>
-
-              <h1>    </h1>
 
               <Button
                 variant="contained"
@@ -360,12 +395,16 @@ function App() {
       </Grid>
 
       <Grid item xs = {12}>
-          <MUIDataTable
-            title={"Pedidos"}
-            data={data}
-            columns={columnas}
-            options={options}
-          />
+        <Card className={classes.root}>
+          <CardContent>
+            <MUIDataTable
+              title={"Pedidos"}
+              data={data}
+              columns={columnas}
+              options={options}
+            />
+          </CardContent>
+        </Card>
       </Grid>
       
     </div>

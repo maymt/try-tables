@@ -172,7 +172,7 @@ function App() {
         <Navbar/>
       </Grid>
 
-      <Grid container spacing = {3}>
+      <Grid container spacing = {8}>
         
         <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
           <Card className={classes.card}>
