@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^12.2.2",
     "axios": "^0.21.0",
     "chart.js": "^2.9.4",
+    "create-react-app": "^4.0.1",
     "date": "^1.0.2",
     "fontsource-roboto": "^3.0.3",
     "material-table": "^1.69.2",
