@@ -17,6 +17,27 @@ const baseUrl = "https://fakeapi-simulador.herokuapp.com/";
 const urlGuardar="http://10.175.3.134:9999/apis_melon/ns_simulador/insertar/";
 const urlSelect="http://10.175.3.134:9999/apis_melon/ns_simulador/select";
 
+        var callAPI = (firstName,lastName)=>{
+            // instantiate a headers object
+            var myHeaders = new Headers();
+            // add content type header to object
+            myHeaders.append("Content-Type", "application/json");
+            // using built in JSON utility package turn object to string and store in a variable
+            var raw = JSON.stringify({"firstName":firstName,"lastName":lastName});
+            // create a JSON object with parameters for API call and store in a variable
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            // make API call with parameters and use promises to get response
+            fetch("YOUR-API-INVOKE-URL", requestOptions)
+            .then(response => response.text())
+            .then(result => alert(JSON.parse(result).body))
+            .catch(error => console.log('error', error));
+        }
+
 
 const columnas = [
   { name: 'Fecha', label: 'Fecha', options: { filter: false, sort: true } },
@@ -259,16 +280,36 @@ function App() {
       monto = 0;
     }
 
-    resumen = [ obra, atraso_suma, adicionales_suma, diferencia, tramos, monto ];
+    resumen = [ obra, atraso_suma, adicionales_suma, (adicionales_suma - atraso_suma), diferencia, tramos, monto ];
     
     setResumen(resumen);
     // console.log(resumen);
   }
 
-
-  const guardarFacturado = async()=>{
-    await axios.get(urlGuardar + resumen[0] + "/" + resumen[5] + "/" + resumen[3])
+  var guardarFacturado = (obra, diff, monto)=>{
+    // instantiate a headers object
+    var myHeaders = new Headers();
+    // add content type header to object
+    myHeaders.append("Content-Type", "application/json");
+    // using built in JSON utility package turn object to string and store in a variable
+    var raw = JSON.stringify({"obra":obra, "diff":diff, "monto":monto});
+    // create a JSON object with parameters for API call and store in a variable
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+    // make API call with parameters and use promises to get response
+    fetch("https://bxupfbi4gb.execute-api.us-east-1.amazonaws.com/dev", requestOptions)
+    .then(response => response.text())
+    .then(result => alert(JSON.parse(result).body))
+    .catch(error => console.log('error', error));
   }
+
+  // const guardarFacturado = async()=>{
+  //   await axios.get(urlGuardar + resumen[0] + "/" + resumen[5] + "/" + resumen[3])
+  // }
   // console.log(urlGuardar + resumen[0] + "/" + resumen[5]);
 
   function getFacturado (obra) {
@@ -331,15 +372,15 @@ function App() {
               </Typography>
 
               <Typography className={classes.texto}>
-                Diferencia: {resumen[3]}
+                Diferencia: {resumen[4]}
               </Typography>
 
               <Typography className={classes.texto}>
-                Tramos de 15min: {resumen[4]}
+                Tramos de 15min: {resumen[5]}
               </Typography>
 
               <Typography className={classes.texto}>
-                Monto: {resumen[5]} UF
+                Monto: {resumen[6]} UF
               </Typography>
               
               <Button
@@ -347,7 +388,7 @@ function App() {
                   color="primary"
                   className={classes.button}
                   startIcon={<Receipt />}
-                  onClick={()=> guardarFacturado()}
+                  onClick={()=> guardarFacturado(resumen[0], resumen[3], resumen[6])}
                   >
                   Facturado
               </Button>
