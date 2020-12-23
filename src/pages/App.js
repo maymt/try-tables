@@ -14,30 +14,8 @@ import moment from 'moment';
 const baseUrl = "https://fakeapi-simulador.herokuapp.com/";
 // const baseUrl = "nobunaga:9999/apis_melon/data_despacho";
 
-const urlGuardar="http://10.175.3.134:9999/apis_melon/ns_simulador/insertar/";
-const urlSelect="http://10.175.3.134:9999/apis_melon/ns_simulador/select";
-
-        var callAPI = (firstName,lastName)=>{
-            // instantiate a headers object
-            var myHeaders = new Headers();
-            // add content type header to object
-            myHeaders.append("Content-Type", "application/json");
-            // using built in JSON utility package turn object to string and store in a variable
-            var raw = JSON.stringify({"firstName":firstName,"lastName":lastName});
-            // create a JSON object with parameters for API call and store in a variable
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
-            // make API call with parameters and use promises to get response
-            fetch("YOUR-API-INVOKE-URL", requestOptions)
-            .then(response => response.text())
-            .then(result => alert(JSON.parse(result).body))
-            .catch(error => console.log('error', error));
-        }
-
+// const urlGuardar="http://10.175.3.134:9999/apis_melon/ns_simulador/insertar/";
+// const urlSelect="http://10.175.3.134:9999/apis_melon/ns_simulador/select";
 
 const columnas = [
   { name: 'Fecha', label: 'Fecha', options: { filter: false, sort: true } },
@@ -160,14 +138,14 @@ function App() {
   }
 
   const peticionGet=async()=>{
-    var hoy = moment().get('year')+"-"+(moment().get('month') + 1)+"-"+(moment().get('day') - 1);
-    hoy = moment(hoy, 'YYYY-MM-dd');
-    hoy = hoy._i;
+    // var hoy = moment().get('year')+"-"+(moment().get('month') + 1)+"-"+(moment().get('day') - 1);
+    // hoy = moment(hoy, 'YYYY-MM-dd');
+    // hoy = hoy._i;
 
-    var inicio = moment().subtract(1, 'months');
-    inicio = moment(inicio).get('year')+"-"+moment(inicio).get('month')+"-"+moment(inicio).get('day');
-    inicio = moment(inicio, 'YYYY-MM-dd');
-    inicio = inicio._i;
+    // var inicio = moment().subtract(1, 'months');
+    // inicio = moment(inicio).get('year')+"-"+moment(inicio).get('month')+"-"+moment(inicio).get('day');
+    // inicio = moment(inicio, 'YYYY-MM-dd');
+    // inicio = inicio._i;
     
     await axios.get(baseUrl+"datos")
     // await axios.get(baseUrl+"/"+inicio+"/"+hoy)
@@ -180,6 +158,19 @@ function App() {
     })
     var resumen = [];
     setResumen(resumen);
+  }
+
+  function filtrarDatos(data, fecha_inicio, fecha_fin, obra) { //filtra los datos por obra y fecha, genera los datos del resumen
+    let x;
+    
+    const rows = []; // pedidos de la obra y fechas seleccionadas
+    var resumen = []; // datos tabla resumenº
+
+    var adicionales_suma = 0; //suma de los minutos adicionales
+    var atraso_suma = 0; //suma de los minutos de atraso
+    var diferencia = 0; //diferencia entre atrasos y minutos adicionales.
+    var tramos = 0; // tramos de 15 minutos en la diferencia
+    var monto = 0; // monto que se debería facturar
 
     var puntual = 0;
     var atraso = 0;
@@ -252,91 +243,6 @@ function App() {
       data[x].push(estadia_real);
       data[x].push(sobrestadia);
     };
-  }
-
-  function filtrarDatos(data, fecha_inicio, fecha_fin, obra) { //filtra los datos por obra y fecha, genera los datos del resumen
-    let x;
-    
-    const rows = []; // pedidos de la obra y fechas seleccionadas
-    var resumen = []; // datos tabla resumenº
-
-    var adicionales_suma = 0; //suma de los minutos adicionales
-    var atraso_suma = 0; //suma de los minutos de atraso
-    var diferencia = 0; //diferencia entre atrasos y minutos adicionales.
-    var tramos = 0; // tramos de 15 minutos en la diferencia
-    var monto = 0; // monto que se debería facturar
-
-    // var puntual = 0;
-    // var atraso = 0;
-    // var estadia_esperada = 0;
-    // var estadia_real = 0;
-    // var min_adicionales = 0;
-    // var min_diferencia = 0;
-
-    // for (x in data){
-    //   if (data[x][3] !== null) {
-        
-    //     if ((data[x][3].includes(obra) && data[x][0] >= fecha_inicio && data[x][0] <= fecha_fin) || (data[x][3].includes(obra) && data[x][0] === fecha_inicio)) {
-    //       // console.log(data[x]);
-    //       // data[x].splice(6,1);
-    //       // console.log(data[x]);
-    //       rows.push(data[x]);
-          
-    //       var solicitada = data[x][10]; //hora solicitada original.
-    //       var llegada = data[x][14]; //hora de llegada a la obra.
-    //       var salida = data[x][15]; // hora de salida de la obra.
-    //       estadia_esperada = 15 + data[x][9] * 6 + 10; //estadia esperada calculada en base al volumen pedido + los 15 minutos de posicionamiento y 10 min de lavado.
-
-    //       if (solicitada !== null && llegada !== null && salida !== null) {
-    //         solicitada = parseInt(solicitada.substring(0,2)) * 3600 + parseInt(solicitada.substring(3,6)) * 60 + parseInt(solicitada.substring(7,8));
-    //         llegada = parseInt(llegada.substring(0,2)) * 3600 + parseInt(llegada.substring(3,6)) * 60 + parseInt(llegada.substring(7,8));
-    //         salida = parseInt(salida.substring(0,2)) * 3600 + parseInt(salida.substring(3,6)) * 60 + parseInt(salida.substring(7,8));
-
-    //         estadia_real = Math.ceil((salida - llegada) / 60);
-
-    //         if (Math.abs(llegada - solicitada) > 1800) {
-    //           atraso =  Math.abs((llegada - solicitada) - 1800 ) ; //1800 s = 30 minutos rango puntualidad
-    //           atraso = Math.ceil(atraso / 60);
-    //           atraso_suma = atraso_suma + atraso;
-    //           puntual = "No";
-    
-    
-    //         } else{
-    //           atraso = 0;
-    //           puntual = "Si";
-    //         };
-
-    //         if (estadia_real > estadia_esperada && puntual === "Si"){
-    //           min_adicionales = estadia_real - estadia_esperada;
-    //           min_adicionales = Math.ceil(min_adicionales);
-    //           adicionales_suma = adicionales_suma + min_adicionales;
-    //         } else {
-    //           min_adicionales = 0;
-    //         }
-      
-    //         if (min_adicionales > atraso) {
-    //           min_diferencia = min_adicionales - atraso;
-    //         } else {
-    //           min_diferencia = (atraso - min_adicionales);
-    //           min_diferencia = min_diferencia + " Minutos a favor";
-    //         }
-      
-    //         // console.log("Puntual? : ", puntual, " - Atraso: ", atraso, " - Adicionales: ", min_adicionales);      
-    //       };
-    //     };
-    //   }
-
-    //   if (estadia_real > estadia_esperada) {
-    //     var sobrestadia = estadia_real - estadia_esperada;
-    //   } else {
-    //     var sobrestadia = 0;
-    //   }
-    //   data[x].push(puntual);  
-    //   data[x].push(atraso);
-    //   data[x].push(estadia_esperada);
-    //   data[x].push(estadia_real);
-    //   data[x].push(sobrestadia);
-    // };
 
     setData(rows);
 
@@ -526,7 +432,7 @@ function App() {
                 color="primary"
                 className={classes.button}
                 startIcon={<FilterList />}
-                onClick={()=> (filtrarDatos(data, obraSeleccionado.fecha_inicio, obraSeleccionado.fecha_fin, obraSeleccionado.obra_oc), getFacturado(obraSeleccionado.obra_oc)) }
+                onClick={()=> (filtrarDatos(data, obraSeleccionado.fecha_inicio, obraSeleccionado.fecha_fin, obraSeleccionado.obra_oc)) }
               >
                 Filtrar
               </Button>
