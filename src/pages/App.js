@@ -307,32 +307,27 @@ function App() {
     .catch(error => console.log('error', error));
   }
 
-  // const guardarFacturado = async()=>{
-  //   await axios.get(urlGuardar + resumen[0] + "/" + resumen[5] + "/" + resumen[3])
-  // }
-  // console.log(urlGuardar + resumen[0] + "/" + resumen[5]);
 
-  function getFacturado (obra) {
-    const select = async()=>{
-      await axios.get(urlSelect)
-      .then(response=>{
-        setFacturado(response.data);
-      })
-    }
+  // function getFacturado (obra) {
+  //   const select = async()=>{
+  //     await axios.get(urlSelect)
+  //     .then(response=>{
+  //       setFacturado(response.data);
+  //     })
+  //   }
     
-    let x;
-    var fechasObra = [];
+  //   let x;
+  //   var fechasObra = [];
 
-    for (x in facturado) {
-      if ( facturado[x][1] === obra ){
-        fechasObra.push(facturado[x][1]);
-      }
-    }
+  //   for (x in facturado) {
+  //     if ( facturado[x][1] === obra ){
+  //       fechasObra.push(facturado[x][1]);
+  //     }
+  //   }
 
-    setFacturado(fechasObra[fechasObra.length -1]);
-  }
+  //   setFacturado(fechasObra[fechasObra.length -1]);
+  // }
   
-
 
   useEffect(()=>{
     peticionGet();
@@ -393,9 +388,9 @@ function App() {
                   Facturado
               </Button>
 
-              <Typography className={classes.texto}>
+              {/* <Typography className={classes.texto}>
                 Última Facturación: {()=> getFacturado(resumen[0])}
-              </Typography>
+              </Typography> */}
 
             </CardContent>
           </Card>
