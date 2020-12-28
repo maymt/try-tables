@@ -26,17 +26,17 @@ function Navbar() {
 		<div className = {classes.root}>
 			<AppBar position = "static" style={{ background: '#006C90'}}>
 				<Toolbar>
-					<IconButton edge = "start" className = {"classes.homeButton"} color = "inherit" href = "http://localhost:3000/">
+					<IconButton edge = "start" className = {"classes.homeButton"} color = "inherit" href = "https://main.d1pxu3g1acpm2h.amplifyapp.com/">
 						<Home />
-					</IconButton>
-
-					<IconButton color="inherit">
-						<img src={logo} width="100px" height="40px" className={classes.imagen}/>
 					</IconButton>
 
 					<Typography variant="h5" className={classes.title}>
 						Simulador Sobrestadía
 					</Typography>
+
+					<IconButton color="inherit">
+						<img src={logo} width="100px" height="40px" className={classes.imagen}/>
+					</IconButton>
 					
 				</Toolbar>
 			</AppBar>
