@@ -7,13 +7,12 @@ import {FilterList, Receipt, Close} from '@material-ui/icons';
 import axios from 'axios';
 import MUIDataTable from "mui-datatables";
 import Navbar from  '../components/Navbar';
-// import moment from 'moment';
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from '../aws-exports';
+Amplify.configure(awsconfig);
 
 const baseUrl = "https://fakeapi-simulador.herokuapp.com/";
-// const baseUrl = "nobunaga:9999/apis_melon/data_despacho";
-
-// const urlGuardar="http://10.175.3.134:9999/apis_melon/ns_simulador/insertar/";
-// const urlSelect="http://10.175.3.134:9999/apis_melon/ns_simulador/select";
 
 const columnas = [
   { name: 'Fecha', label: 'Fecha', options: { filter: false, sort: true } },
@@ -22,48 +21,27 @@ const columnas = [
   { name: 'obra', label: 'Cod. Obra', options: { filter: false, sort: true } }, 
   { name: 'obra_name', label: 'Nombre Obra', options: { filter: false, sort: false } }, 
   { name: 'pedido', label: 'Pedido', options: { filter: false, sort: false } }, 
-  // { name: 'tren_pedido', label: 'Tren Pedido', options: { filter: false, sort: false } }, 
-  // { name: 'posicion_en_tren', label: 'Posición Tren', options: { filter: false, sort: false } }, 
   { name: 'Guia_despacho', label: 'Guía Despacho', options: { filter: false, sort: false } }, 
-  { name: 'planta', label: 'Planta', options: { filter: false, sort: true } }, 
-  // { name: 'producto_codigo', label: 'Cod. Producto', options: { filter: false, sort: false } }, 
+  { name: 'planta', label: 'Planta', options: { filter: false, sort: true } },
   { name: 'producto', label: 'Producto', options: { filter: false, sort: false } }, 
   { name: 'm3', label: 'Volumen', options: { filter: true, sort: false, filterType: 'multiselect' } }, 
-  // { name: 'camion', label: 'Camión', options: { filter: false, sort: false } }, 
-  // { name: 'contratista', label: 'Contratista', options: { filter: false, sort: false }}, 
   { name: 'hora_solicitada_cliente_original', label: 'Hora Solicitada', options: { filter: false, sort: false } }, 
   { name: 'hora_solicitada_cliente_primer_despacho_de_tren', label: 'Hora 1er Tren', options: { filter: false, sort: false } }, 
   { name: 'hora_solicitada_cliente_corregida', label: 'Hora Corregida', options: { filter: false, sort: false } }, 
   { name: 'espaciamiento', label: 'Espaciamiento', options: { filter: false, sort: false } }, 
-  // { name: 'tiempo_viaje_vuelta_proyectado', label: 'Tiempo Ida', options: { filter: false, sort: false } }, 
-  // { name: 'tiempo_ida_vuelta_proyectado', label: 'Tiempo Vuelta', options: { filter: false, sort: false } }, 
-  // { name: 'hora_tiquete', label: 'Hora Tiquete', options: { filter: false, sort: false } }, 
-  // { name: 'hora_de_carga', label: 'Hora Inicio Carga', options: { filter: false, sort: false } }, 
-  // { name: 'hora_fin_de_carga', label: 'Hora Fin Carga', options: { filter: false, sort: false } }, 
-  // { name: 'hora_salida_de_planta', label: 'Hora Salida Planta', options: { filter: false, sort: false } }, 
   { name: 'hora_llegada_a_obra', label: 'Hora Llegada Obra', options: { filter: false, sort: false, filterType: 'multiselect'} }, 
-  // { name: 'hora_inicio_descarga', label: 'Hora Inicio Descarga', options: { filter: false, sort: false } }, 
   { name: 'hora_salida_a_planta', label: ' Hora Salida Obra', options: { filter: false, sort: false } },
-  // { name: 'hora_llegada_a_planta', label: 'Hora Llegada Planta', options: { filter: false, sort: false } },
   { name: 'direccion', label: 'Dirección', options: { filter: false, sort: false } }, 
-  // { name: 'cuadrante', label: 'Cuadrante', options: { filter: false, sort: false } }, 
-  // { name: 'anillo', label: 'Anillo', options: { filter: false, sort: false } }, 
-  // { name: 'costo_produccion', label: 'Costo Producción', options: { filter: false, sort: false } }, 
   { name: 'codigo_remosion_pedido', label: 'Cod. Remoción Pedido', options: { filter: true, sort: false, filterType: 'multiselect' } },
   { name: 'codigo_remosion_tren', label: 'Cod. Remoción Tren', options: { filter: false, sort: false } }, 
   { name: 'codigo_remosion_tren', label: 'Cod. Remoción Tren', options: { filter: false, sort: false } }, 
   { name: 'codigo_remosion_linea', label: 'Cod. Remoción Línea', options: { filter: false, sort: false } }, 
   { name: 'codigo_remosion_fuera_plazo', label: 'Cod. Remoción FP', options: { filter: false, sort: false, filterType: 'multiselect' } }, 
-  // { name: 'm3_a_botadero', label: 'M3 Botadero', options: { filter: false, sort: false } }, 
-  // { name: 'm3_a_redestino', label: 'M3 Redestino', options: { filter: false, sort: true } },
   { name: 'puntual', label: '¿Puntual?', options: { filter: true, sort: false } }, 
   { name: 'atraso', label: 'Atraso', options: { filter: true, sort: false } }, 
   { name: 'estadia_esperada', label: 'Estadía Esperada', options: { filter: true, sort: false } }, 
   { name: 'estadia_real', label: 'Estadía Real', options: { filter: true, sort: false } },
   { name: 'min_adicionales', label: 'Minutos Sobrestadía', options: { filter: true, sort: false } }, 
-  // { name: 'min_diferencia', label: 'Total Minutos', options: { filter: true, sort: false } }, 
-  // { name: 'tramos', label: 'Tramos', options: { filter: true, sort: false } }, 
-  // { name: 'monto', label: 'Monto', options: { filter: true, sort: false } }
 ];
 
 
@@ -134,17 +112,8 @@ function App() {
   }
 
   const peticionGet=async()=>{
-    // var hoy = moment().get('year')+"-"+(moment().get('month') + 1)+"-"+(moment().get('day') - 1);
-    // hoy = moment(hoy, 'YYYY-MM-dd');
-    // hoy = hoy._i;
-
-    // var inicio = moment().subtract(1, 'months');
-    // inicio = moment(inicio).get('year')+"-"+moment(inicio).get('month')+"-"+moment(inicio).get('day');
-    // inicio = moment(inicio, 'YYYY-MM-dd');
-    // inicio = inicio._i;
     
     await axios.get(baseUrl+"datos")
-    // await axios.get(baseUrl+"/"+inicio+"/"+hoy)
     .then(response=>{
       // console.log(response.data)
       setData(response.data);
@@ -280,27 +249,6 @@ function App() {
     .then(result => alert(JSON.parse(result).body))
     .catch(error => console.log('error', error));
   }
-
-
-  // function getFacturado (obra) {
-  //   const select = async()=>{
-  //     await axios.get(urlSelect)
-  //     .then(response=>{
-  //       setFacturado(response.data);
-  //     })
-  //   }
-    
-  //   let x;
-  //   var fechasObra = [];
-
-  //   for (x in facturado) {
-  //     if ( facturado[x][1] === obra ){
-  //       fechasObra.push(facturado[x][1]);
-  //     }
-  //   }
-
-  //   setFacturado(fechasObra[fechasObra.length -1]);
-  // }
   
 
   useEffect(()=>{
@@ -312,6 +260,7 @@ function App() {
 
       <Grid item xs = {12}>
         <Navbar/>
+        <AmplifySignOut />
       </Grid>
 
 
@@ -467,4 +416,4 @@ function App() {
   );
 }
 
-export default App;
+export default withAuthenticator(App);

@@ -1,0 +1,17 @@
+{
+  "projectName": "trytables",
+  "version": "3.0",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "react",
+    "config": {
+      "SourceDir": "src",
+      "DistributionDir": "build",
+      "BuildCommand": "npm react-scripts build",
+      "StartCommand": "npm react-scripts start"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
+}

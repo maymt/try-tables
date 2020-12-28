@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "trytables806e1340": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
