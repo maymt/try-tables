@@ -7,9 +7,7 @@ import {FilterList, Receipt, Close} from '@material-ui/icons';
 import axios from 'axios';
 import MUIDataTable from "mui-datatables";
 import Navbar from  '../components/Navbar';
-import moment from 'moment';
-
-
+// import moment from 'moment';
 
 const baseUrl = "https://fakeapi-simulador.herokuapp.com/";
 // const baseUrl = "nobunaga:9999/apis_melon/data_despacho";
@@ -51,11 +49,11 @@ const columnas = [
   // { name: 'cuadrante', label: 'Cuadrante', options: { filter: false, sort: false } }, 
   // { name: 'anillo', label: 'Anillo', options: { filter: false, sort: false } }, 
   // { name: 'costo_produccion', label: 'Costo Producción', options: { filter: false, sort: false } }, 
-  { name: 'codigo_remosion_pedido', label: 'Cod. Remosión Pedido', options: { filter: true, sort: false, filterType: 'multiselect' } },
-  { name: 'codigo_remosion_tren', label: 'Cod. Remosión Tren', options: { filter: false, sort: false } }, 
-  { name: 'codigo_remosion_tren', label: 'Cod. Remosión Tren', options: { filter: false, sort: false } }, 
-  { name: 'codigo_remosion_linea', label: 'Cod. Remosión Línea', options: { filter: false, sort: false } }, 
-  { name: 'codigo_remosion_fuera_plazo', label: 'Cod. Remosión FP', options: { filter: false, sort: false, filterType: 'multiselect' } }, 
+  { name: 'codigo_remosion_pedido', label: 'Cod. Remoción Pedido', options: { filter: true, sort: false, filterType: 'multiselect' } },
+  { name: 'codigo_remosion_tren', label: 'Cod. Remoción Tren', options: { filter: false, sort: false } }, 
+  { name: 'codigo_remosion_tren', label: 'Cod. Remoción Tren', options: { filter: false, sort: false } }, 
+  { name: 'codigo_remosion_linea', label: 'Cod. Remoción Línea', options: { filter: false, sort: false } }, 
+  { name: 'codigo_remosion_fuera_plazo', label: 'Cod. Remoción FP', options: { filter: false, sort: false, filterType: 'multiselect' } }, 
   // { name: 'm3_a_botadero', label: 'M3 Botadero', options: { filter: false, sort: false } }, 
   // { name: 'm3_a_redestino', label: 'M3 Redestino', options: { filter: false, sort: true } },
   { name: 'puntual', label: '¿Puntual?', options: { filter: true, sort: false } }, 
@@ -121,8 +119,6 @@ function App() {
   const classes = useStyles();
   const [data, setData] = useState([]);
   const [resumen, setResumen] = useState([]);
-  const [facturado, setFacturado] = useState([]);
-  
   const [obraSeleccionado, setObraSeleccionado]=useState({ //Datos que se ponen en los inputs
     fecha_inicio: "",
     fecha_fin: "",
@@ -310,7 +306,6 @@ function App() {
   useEffect(()=>{
     peticionGet();
   }, [])
-
 
   return (
     <div className={classes.root}>

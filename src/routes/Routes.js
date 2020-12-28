@@ -1,8 +1,9 @@
 import React from 'react';
 import {BrowserRouter,Switch,Route} from 'react-router-dom';
-import App from '../pages/App'
+import App from '../pages/App';
 
-function App() {
+
+function Routes() {
   return (
     <BrowserRouter>
     <Switch>
@@ -12,4 +13,4 @@ function App() {
   );
 }
 
-export default App;
+export default Routes;

@@ -21,6 +21,7 @@ const useStyles = makeStyles(()=>({
 
 function Navbar() {
 	const classes = useStyles();
+	
 	return (
 		<div className = {classes.root}>
 			<AppBar position = "static" style={{ background: '#006C90'}}>
@@ -28,12 +29,15 @@ function Navbar() {
 					<IconButton edge = "start" className = {"classes.homeButton"} color = "inherit" href = "http://localhost:3000/">
 						<Home />
 					</IconButton>
-					<Typography variant="h5" className={classes.title}>
-						MVP Sobrestadía
-					</Typography>
+
 					<IconButton color="inherit">
 						<img src={logo} width="100px" height="40px" className={classes.imagen}/>
 					</IconButton>
+
+					<Typography variant="h5" className={classes.title}>
+						Simulador Sobrestadía
+					</Typography>
+					
 				</Toolbar>
 			</AppBar>
 		</div>
