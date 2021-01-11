@@ -24,7 +24,7 @@ const columnas = [
   { name: 'Guia_despacho', label: 'Guía Despacho', options: { filter: false, sort: false } }, 
   { name: 'planta', label: 'Planta', options: { filter: false, sort: true } },
   { name: 'producto', label: 'Producto', options: { filter: false, sort: false } }, 
-  { name: 'm3', label: 'Volumen', options: { filter: true, sort: false, filterType: 'multiselect' } }, 
+  { name: 'm3', label: 'Volumen', options: { filter: true, sort: true, filterType: 'multiselect' } }, 
   { name: 'hora_solicitada_cliente_original', label: 'Hora Solicitada', options: { filter: false, sort: false } }, 
   { name: 'hora_solicitada_cliente_primer_despacho_de_tren', label: 'Hora 1er Tren', options: { filter: false, sort: false } }, 
   { name: 'hora_solicitada_cliente_corregida', label: 'Hora Corregida', options: { filter: false, sort: false } }, 
@@ -48,7 +48,7 @@ const columnas = [
  const options = {
   rowsPerPage: 10,
   filterType: 'textField',
-  download: 'false',
+  download: 'true',
   print: 'false',
   search: 'false',
   fixedColumns: 2
