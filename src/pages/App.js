@@ -136,6 +136,7 @@ function App() {
     var diferencia = 0; //diferencia entre atrasos y minutos adicionales.
     var tramos = 0; // tramos de 15 minutos en la diferencia
     var monto = 0; // monto que se debería facturar
+    var volumen_suma = 0; //suma del volumen de todos los pedidos
 
     var puntual = 0;
     var atraso = 0;
@@ -191,6 +192,10 @@ function App() {
               min_diferencia = (atraso - min_adicionales);
               min_diferencia = min_diferencia + " Minutos a favor";
             }
+
+            if (data[x][17] === null && data[x][21] === null) {
+              volumen_suma = volumen_suma + data[x][9];
+            }
       
             // console.log("Puntual? : ", puntual, " - Atraso: ", atraso, " - Adicionales: ", min_adicionales);      
           };
@@ -223,7 +228,7 @@ function App() {
       monto = 0;
     }
 
-    resumen = [ obra, atraso_suma, adicionales_suma, (adicionales_suma - atraso_suma), diferencia, tramos, monto ];
+    resumen = [ obra, atraso_suma, adicionales_suma, (adicionales_suma - atraso_suma), diferencia, tramos, monto, volumen_suma ];
     
     setResumen(resumen);
     // console.log(resumen);
@@ -298,6 +303,10 @@ function App() {
 
               <Typography className={classes.texto}>
                 Monto: {resumen[6]} UF
+              </Typography>
+
+              <Typography className={classes.texto}>
+                Volumen: {resumen[7]} m3
               </Typography>
               
               <Button
