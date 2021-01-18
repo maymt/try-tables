@@ -36,7 +36,7 @@ const columnas = [
   { name: 'codigo_remosion_tren', label: 'Cod. Remoción Tren', options: { filter: false, sort: false } }, 
   { name: 'codigo_remosion_tren', label: 'Cod. Remoción Tren', options: { filter: false, sort: false } }, 
   { name: 'codigo_remosion_linea', label: 'Cod. Remoción Línea', options: { filter: false, sort: false } }, 
-  { name: 'codigo_remosion_fuera_plazo', label: 'Cod. Remoción FP', options: { filter: false, sort: false, filterType: 'multiselect' } }, 
+  { name: 'codigo_remosion_fuera_plazo', label: 'Cod. Remoción FP', options: { filter: true, sort: false, filterType: 'multiselect' } }, 
   { name: 'puntual', label: '¿Puntual?', options: { filter: true, sort: false } }, 
   { name: 'atraso', label: 'Atraso', options: { filter: true, sort: false } }, 
   { name: 'estadia_esperada', label: 'Estadía Esperada', options: { filter: true, sort: false } }, 
